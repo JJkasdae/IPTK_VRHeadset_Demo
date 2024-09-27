@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9beff9af4aa66aa45a6244e8c91baf9a, type: 3}
+  m_Name: Presentation
+  m_EditorClassIdentifier: 
+  _name: Presentation 1
+  _description: Include all presentation contents.
+  _timeline: {fileID: 11400000, guid: 360b540da31c2d64785790c0fe6ad1a3, type: 2}

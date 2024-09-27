@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92d794ced2149694496d9b958c70e517, type: 3}
+  m_Name: Timeline
+  m_EditorClassIdentifier: 
+  _transitionData:
+  - {fileID: 11400000, guid: 64d4fbf056392524db5701175b89a145, type: 2}
+  - {fileID: 11400000, guid: 2845f74c1f929214d8565bb7938ee210, type: 2}
+  - {fileID: 11400000, guid: 26d458e0ea22ed34c871f179280779ca, type: 2}
