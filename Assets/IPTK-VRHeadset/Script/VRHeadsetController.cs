@@ -27,6 +27,8 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
 
     private Vector3 moveDirection = Vector3.zero;
 
+    private DisplayPrompt displayPrompt;
+
     public void Initialize(Player player)
     {
         this.player = player;
@@ -56,6 +58,13 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
             laserLineRenderer.material = new Material(Shader.Find("Unlit/Color"));
             laserLineRenderer.material.color = Color.red;
         }
+
+        // Initialize DisplayPrompt for the presenter
+        if (player.userType == PlayerType.Presenter)
+        {
+            // Find the DisplayPrompt in the scene
+            displayPrompt = FindObjectOfType<DisplayPrompt>();
+        }
     }
 
     public void HandleInput(Camera playerCamera)
@@ -70,6 +79,8 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
         if (player.userType == PlayerType.Presenter)
         {
             HandleSceneChange();
+            AttentionUIMessage();
+            HandlePromptDisplay();
         }
     }
 
@@ -169,6 +180,26 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
         else if (OVRInput.GetDown(OVRInput.Button.Two) && player._currentSessionIndex > 0)
         {
             player.CmdChangeScene(player._presentationData.Timeline.transitionData[player._currentSessionIndex - 1].lastSession.sceneName);
+        }
+    }
+
+    private void HandlePromptDisplay()
+    {
+        // Trigger the display prompt using the left controller's button
+        if (OVRInput.GetDown(OVRInput.Button.Three)) // Example: Left controller button press
+        {
+            if (displayPrompt != null)
+            {
+                displayPrompt.TogglePrompt(); // Call the method to toggle the prompt's visibility
+            }
+        }
+    }
+
+    private void AttentionUIMessage()
+    {
+        if (OVRInput.GetDown(OVRInput.Button.Four))
+        {
+            player.CmdToggleAudienceReminder();
         }
     }
 }

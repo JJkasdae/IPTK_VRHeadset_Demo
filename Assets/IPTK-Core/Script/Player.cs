@@ -23,14 +23,17 @@ public class Player : NetworkBehaviour
 
     public PresentationData _presentationData;
 
-    public GameObject attentionUIPrefab;
-    private GameObject attentionUIInstance;
-
     private IPlayerController controller;
-    private Camera playerCamera;
+    public Camera playerCamera;
     private bool isFull; // Check whether all spawn points are used
     public int _currentSessionIndex = 0;
     private string _currentSceneName;
+    private DisplayPrompt displayPrompt;
+
+    // dynamically create instances of attentionUI
+    public GameObject attentionUIPrefab;
+    private GameObject attentionUIInstance;
+    private DisplayAttentionUI displayAttentionUI;
 
     void Start()
     {
@@ -40,11 +43,6 @@ public class Player : NetworkBehaviour
             DetectInputDevice();
 
             initializeSceneData();
-            //GameObject networkConnectionUI = GameObject.Find("Network Connection UI");
-            //if (networkConnectionUI != null)
-            //{
-            //    networkConnectionUI.SetActive(false);
-            //}
         }
         else
         {
@@ -54,7 +52,14 @@ public class Player : NetworkBehaviour
 
         if (isLocalPlayer && userType == PlayerType.Audience)
         {
-            CreateAttentionUI();
+            InitializeAttentionUI();
+        }
+
+        // Find the DisplayPrompt in the scene
+        displayPrompt = FindObjectOfType<DisplayPrompt>();
+        if (displayPrompt != null)
+        {
+            displayPrompt.InitializeForPresenter(this);
         }
     }
 
@@ -113,6 +118,32 @@ public class Player : NetworkBehaviour
             Debug.LogError("VRController could not be added or initialized.");
         }
     }
+
+    void InitializeAttentionUI()
+    {
+        if (attentionUIPrefab != null)
+        {
+            // Instantiate the AttentionUI prefab
+            attentionUIInstance = Instantiate(attentionUIPrefab, transform);
+
+            displayAttentionUI = attentionUIInstance.GetComponent<DisplayAttentionUI>();
+
+            attentionUIInstance.GetComponentInChildren<Canvas>().renderMode = RenderMode.ScreenSpaceCamera;
+            attentionUIInstance.GetComponentInChildren<Canvas>().worldCamera = playerCamera;
+
+            // Optionally set its position in front of the player or camera
+            attentionUIInstance.transform.position = playerCamera.transform.position + playerCamera.transform.forward * 2f;
+
+            // Ensure the UI faces the player
+            attentionUIInstance.transform.LookAt(playerCamera.transform);
+            attentionUIInstance.transform.Rotate(0, 180f, 0);
+        }
+        else
+        {
+            Debug.LogError("AttentionUI prefab is not assigned.");
+        }
+
+        }
 
     [Command]
     void CmdRequestSpawnPoint(NetworkConnectionToClient conn = null)
@@ -232,20 +263,6 @@ public class Player : NetworkBehaviour
         controller?.HandleInput(playerCamera);
     }
 
-    private void CreateAttentionUI()
-    {
-        if (attentionUIPrefab != null && playerCamera != null)
-        {
-            attentionUIInstance = Instantiate(attentionUIPrefab, playerCamera.transform);
-            attentionUIInstance.transform.localPosition = new Vector3(0, 0, 10);
-            attentionUIInstance.SetActive(false);
-        }
-        else
-        {
-            Debug.LogError("AttentionUI Prefab or PlayerCamera is not assigned!");
-        }
-    }
-
     public override void OnStartLocalPlayer()
     {
         //base.OnStartLocalPlayer();
@@ -282,16 +299,31 @@ public class Player : NetworkBehaviour
     }
 
     [Command]
-    public void CmdShowAttentionMessage()
+    public void CmdToggleAudienceReminder()
     {
-        RpcShowAttentionMessage();
-        print("Call RPCShowAttentionMessage");
+        foreach (var player in NetworkServer.connections.Values)
+        {
+            if (player.identity != null)
+            {
+                var playerScript = player.identity.GetComponent<Player>();
+                if (playerScript.userType == PlayerType.Audience)
+                {
+                    playerScript.RpcToggleAudienceReminder();
+                }
+            }
+        }
     }
 
     [ClientRpc]
-    private void RpcShowAttentionMessage()
+    private void RpcToggleAudienceReminder()
     {
-        print("prompt UI");
-        attentionUIInstance.SetActive(!attentionUIInstance.activeSelf);
+        if (this.userType == PlayerType.Audience && this.attentionUIInstance != null)
+        {
+            displayAttentionUI.ToggleUI();
+        }
     }
+
+
+
+
 }

@@ -22,6 +22,8 @@ public class DesktopController : MonoBehaviour, IPlayerController
     [SerializeField]
     private float rotationSpeed = 100f;
 
+    private DisplayPrompt displayPrompt;
+
     public void Initialize(Player player)
     {
         this.player = player;
@@ -36,6 +38,13 @@ public class DesktopController : MonoBehaviour, IPlayerController
         if (characterController == null)
         {
             Debug.LogError("character controller cannot be found in player prefab");
+        }
+
+        // Initialize DisplayPrompt for the presenter
+        if (player.userType == PlayerType.Presenter)
+        {
+            // Find the DisplayPrompt in the scene
+            displayPrompt = FindObjectOfType<DisplayPrompt>();
         }
     }
 
@@ -70,6 +79,7 @@ public class DesktopController : MonoBehaviour, IPlayerController
         {
             HandleSceneChange();
             AttentionUIMessage();
+            HandlePromptDisplay();
         }
     }
 
@@ -128,6 +138,7 @@ public class DesktopController : MonoBehaviour, IPlayerController
 
     private void TeleportMovement(Camera playerCamera)
     {
+        Debug.Log("Desktop teleport");
         Vector3? teleportPosition = FindObjectOfType<TeleportPointManager>().CheckForTeleportPointClick(playerCamera);
         if (teleportPosition.HasValue)
         {
@@ -147,12 +158,24 @@ public class DesktopController : MonoBehaviour, IPlayerController
         }
     }
 
+    private void HandlePromptDisplay()
+    {
+        // Trigger the display prompt using the left controller's button
+        if (Input.GetKeyDown(KeyCode.O)) // Example: Left controller button press
+        {
+            if (displayPrompt != null)
+            {
+                displayPrompt.TogglePrompt(); // Call the method to toggle the prompt's visibility
+            }
+        }
+    }
+
     private void AttentionUIMessage()
     {
         if (Input.GetKeyDown(KeyCode.U))
         {
             print("Click on Prompt UI");
-            player.CmdShowAttentionMessage();
+            player.CmdToggleAudienceReminder();
         }
     }
 

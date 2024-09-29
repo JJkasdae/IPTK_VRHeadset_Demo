@@ -22,13 +22,42 @@ public class IPTKNetworkManager : NetworkManager
 
     private NetworkConnection currentPresenterConn = null; // Track the presenter connection
 
+    private bool serverStarted = false;  // To track if the server was started by this player
+
+
     /// <summary>
     /// Runs on both Server and Client
     /// Networking is NOT initialized when this fires
     /// </summary>
-    public override void Awake()
+    public override void Start()
     {
-        base.Awake();
+        base.Start();
+
+        // Automatically try to connect as a client
+        AttemptClientConnection();
+    }
+
+    private void AttemptClientConnection()
+    {
+        // Attempt to connect as a client
+        Debug.Log("Trying to connect as a client...");
+        StartClient();
+
+        // Add a delay to check if client connection was successful or not
+        Invoke(nameof(CheckClientConnection), 3f);  // Check after 3 seconds
+    }
+
+    private void CheckClientConnection()
+    {
+        // If client is not active after trying, start the server
+        if (!NetworkClient.isConnected)
+        {
+            Debug.Log("Client connection failed. Starting server...");
+            StopHost();
+            StartHost();  // This will start both server and client on the host
+
+            serverStarted = true;  // Set the serverStarted flag
+        }
     }
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)

@@ -1350,7 +1350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3202108611365214585, guid: 6764439dfe77fb9409efdff678fed310, type: 3}
       propertyPath: movementType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 787680696336226978, guid: 6764439dfe77fb9409efdff678fed310, type: 3}
       propertyPath: m_Name
@@ -2241,7 +2241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3202108611365214585, guid: 6764439dfe77fb9409efdff678fed310, type: 3}
       propertyPath: movementType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 787680696336226978, guid: 6764439dfe77fb9409efdff678fed310, type: 3}
       propertyPath: m_Name
