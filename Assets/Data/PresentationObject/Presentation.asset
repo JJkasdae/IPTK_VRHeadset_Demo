@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Presentation
   m_EditorClassIdentifier: 
   _name: Presentation 1
-  _description: Include all presentation contents.
+  _description: A brief description of a presentation.
   _timeline: {fileID: 11400000, guid: 360b540da31c2d64785790c0fe6ad1a3, type: 2}
