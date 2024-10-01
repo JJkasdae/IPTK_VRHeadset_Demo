@@ -29,6 +29,8 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
 
     private DisplayPrompt displayPrompt;
 
+    private ShowModels showModels;
+
     public void Initialize(Player player)
     {
         this.player = player;
@@ -65,6 +67,8 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
             // Find the DisplayPrompt in the scene
             displayPrompt = FindObjectOfType<DisplayPrompt>();
         }
+
+        showModels = FindObjectOfType<ShowModels>();
     }
 
     public void HandleInput(Camera playerCamera)
@@ -81,6 +85,7 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
             HandleSceneChange();
             AttentionUIMessage();
             HandlePromptDisplay();
+            ShowModels();
         }
     }
 
@@ -200,6 +205,22 @@ public class VRHeadsetController : MonoBehaviour, IPlayerController
         if (OVRInput.GetDown(OVRInput.Button.Four))
         {
             player.CmdToggleAudienceReminder();
+        }
+    }
+
+    private void ShowModels()
+    {
+        if (OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger)) // 按下 "N" 键切换到下一个星球
+        {
+            if (player.isServer)
+            {
+                showModels.ShowNextPlanet(); // 服务器直接切换星球
+            }
+            else if (player.isLocalPlayer)
+            {
+                // 如果客户端没有权限，通过 Command 让服务器切换
+                showModels.CmdNextPlanet();
+            }
         }
     }
 }

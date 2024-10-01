@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 
 public class DesktopController : MonoBehaviour, IPlayerController
 {
@@ -24,6 +26,8 @@ public class DesktopController : MonoBehaviour, IPlayerController
 
     private DisplayPrompt displayPrompt;
 
+    private ShowModels showModels;
+
     public void Initialize(Player player)
     {
         this.player = player;
@@ -46,6 +50,8 @@ public class DesktopController : MonoBehaviour, IPlayerController
             // Find the DisplayPrompt in the scene
             displayPrompt = FindObjectOfType<DisplayPrompt>();
         }
+
+        showModels = FindObjectOfType<ShowModels>();
     }
 
     public void HandleInput(Camera playerCamera)
@@ -80,6 +86,8 @@ public class DesktopController : MonoBehaviour, IPlayerController
             HandleSceneChange();
             AttentionUIMessage();
             HandlePromptDisplay();
+            ShowModels();
+            
         }
     }
 
@@ -138,7 +146,7 @@ public class DesktopController : MonoBehaviour, IPlayerController
 
     private void TeleportMovement(Camera playerCamera)
     {
-        Debug.Log("Desktop teleport");
+        //Debug.Log("Desktop teleport");
         Vector3? teleportPosition = FindObjectOfType<TeleportPointManager>().CheckForTeleportPointClick(playerCamera);
         if (teleportPosition.HasValue)
         {
@@ -176,6 +184,22 @@ public class DesktopController : MonoBehaviour, IPlayerController
         {
             print("Click on Prompt UI");
             player.CmdToggleAudienceReminder();
+        }
+    }
+
+    private void ShowModels()
+    {
+        if (Input.GetKeyDown(KeyCode.N)) // 按下 "N" 键切换到下一个星球
+        {
+            if (player.isServer)
+            {
+                showModels.ShowNextPlanet(); // 服务器直接切换星球
+            }
+            else if (player.isLocalPlayer)
+            {
+                // 如果客户端没有权限，通过 Command 让服务器切换
+                showModels.CmdNextPlanet();
+            }
         }
     }
 
