@@ -28,6 +28,21 @@ public class DesktopController : MonoBehaviour, IPlayerController
 
     private ShowModels showModels;
 
+    private InputAction moveForwardAction;
+    private InputAction moveBackwardAction;
+    private InputAction moveLeftAction;
+    private InputAction moveRightAction;
+    private InputAction jumpAction;
+    private InputAction nextPlanetAction;
+    private InputAction rotateLeftAction;
+    private InputAction rotateRightAction;
+    private InputAction rotateUpAction;
+    private InputAction rotateDownAction;
+    private InputAction showPromptAction;
+    private InputAction showAttentionUIAction;
+    private InputAction nextSceneAction;
+    private InputAction previousSceneAction;
+
     public void Initialize(Player player)
     {
         this.player = player;
@@ -52,6 +67,73 @@ public class DesktopController : MonoBehaviour, IPlayerController
         }
 
         showModels = FindObjectOfType<ShowModels>();
+
+        moveForwardAction = new InputAction(binding: "<Keyboard>/w");
+        moveBackwardAction = new InputAction(binding: "<Keyboard>/s");
+        moveLeftAction = new InputAction(binding: "<Keyboard>/a");
+        moveRightAction = new InputAction(binding: "<Keyboard>/d");
+        jumpAction = new InputAction(binding: "<Keyboard>/space");
+        nextPlanetAction = new InputAction(binding: "<Keyboard>/n");
+        rotateLeftAction = new InputAction(binding: "<Keyboard>/j");
+        rotateRightAction = new InputAction(binding: "<Keyboard>/l");
+        rotateUpAction = new InputAction(binding: "<Keyboard>/k");
+        rotateDownAction = new InputAction(binding: "<Keyboard>/i");
+        showPromptAction = new InputAction(binding: "<Keyboard>/o");
+        showAttentionUIAction = new InputAction(binding: "<Keyboard>/u");
+        nextSceneAction = new InputAction(binding: "<Keyboard>/rightArrow");
+        previousSceneAction = new InputAction(binding: "<Keyboard>/leftArrow");
+
+        nextPlanetAction.performed += ShowModels;
+        showPromptAction.performed += HandlePromptDisplay;
+        showAttentionUIAction.performed += AttentionUIMessage;
+        nextSceneAction.performed += NextScenePressed;
+        previousSceneAction.performed += LastScenePressed;
+
+        OnEnable();
+
+
+    }
+
+    private void OnEnable()
+    {
+        if (moveForwardAction != null && moveBackwardAction != null && moveLeftAction != null && moveRightAction != null &&
+            jumpAction != null && rotateLeftAction != null && rotateRightAction != null && rotateUpAction != null &&
+            rotateDownAction != null && nextPlanetAction != null && showPromptAction != null && showAttentionUIAction != null &&
+            nextSceneAction != null && previousSceneAction != null)
+        {
+            moveForwardAction.Enable();
+            moveBackwardAction.Enable();
+            moveLeftAction.Enable();
+            moveRightAction.Enable();
+            jumpAction.Enable();
+            rotateLeftAction.Enable();
+            rotateRightAction.Enable();
+            rotateUpAction.Enable();
+            rotateDownAction.Enable();
+            nextPlanetAction.Enable();
+            showPromptAction.Enable();
+            showAttentionUIAction.Enable();
+            nextSceneAction.Enable();
+            previousSceneAction.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        moveForwardAction.Disable();
+        moveBackwardAction.Disable();
+        moveLeftAction.Disable();
+        moveRightAction.Disable();
+        jumpAction.Disable();
+        rotateLeftAction.Disable();
+        rotateRightAction.Disable();
+        rotateUpAction.Disable();
+        rotateDownAction.Disable();
+        nextPlanetAction.Disable();
+        showPromptAction.Disable();
+        showAttentionUIAction.Disable();
+        nextSceneAction.Disable();
+        previousSceneAction.Disable();
     }
 
     public void HandleInput(Camera playerCamera)
@@ -64,7 +146,7 @@ public class DesktopController : MonoBehaviour, IPlayerController
                 moveDirection.y = 0f;
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (jumpAction.triggered)
             {
                 moveDirection.y = JumpSpeed;
             }
@@ -79,16 +161,6 @@ public class DesktopController : MonoBehaviour, IPlayerController
         }
 
         PlayerRotation();
-        
-
-        if (player.userType == PlayerType.Presenter)
-        {
-            HandleSceneChange();
-            AttentionUIMessage();
-            HandlePromptDisplay();
-            ShowModels();
-            
-        }
     }
 
     private void FreeRoamingMovement()
@@ -97,20 +169,20 @@ public class DesktopController : MonoBehaviour, IPlayerController
         float moveVertical = 0f;
 
         // 使用WASD控制移动，忽略方向键
-        if (Input.GetKey(KeyCode.W))
+        if (moveForwardAction.ReadValue<float>() > 0)
         {
             moveVertical = 1f;
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (moveBackwardAction.ReadValue<float>() > 0)
         {
             moveVertical = -1f;
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (moveLeftAction.ReadValue<float>() > 0)
         {
             moveHorizontal = -1f;
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (moveRightAction.ReadValue<float>() > 0)
         {
             moveHorizontal = 1f;
         }
@@ -125,19 +197,19 @@ public class DesktopController : MonoBehaviour, IPlayerController
     private void PlayerRotation()
     {
         // 使用Q和E键进行左右旋转
-        if (Input.GetKey(KeyCode.J))
+        if (rotateLeftAction.ReadValue<float>() > 0)
         {
             transform.Rotate(Vector3.up * -rotationSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.L))
+        if (rotateRightAction.ReadValue<float>() > 0)
         {
             transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.I))
+        if (rotateDownAction.ReadValue<float>() > 0)
         {
             transform.Rotate(Vector3.left * rotationSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.K))
+        if (rotateUpAction.ReadValue<float>() > 0)
         {
             transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
         }
@@ -154,23 +226,27 @@ public class DesktopController : MonoBehaviour, IPlayerController
         }
     }
 
-    private void HandleSceneChange()
+    private void NextScenePressed(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow) && player._currentSessionIndex < player._presentationData.Timeline.transitionData.Length - 1)
+        if (player.userType == PlayerType.Presenter && player._currentSessionIndex < player._presentationData.Timeline.transitionData.Length - 1)
         {
             player.CmdChangeScene(player._presentationData.Timeline.transitionData[player._currentSessionIndex].nextSession.sceneName);
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) && player._currentSessionIndex > 0)
+    }
+
+    private void LastScenePressed(InputAction.CallbackContext context)
+    {
+        if (player.userType == PlayerType.Presenter && player._currentSessionIndex > 0)
         {
             player.CmdChangeScene(player._presentationData.Timeline.transitionData[player._currentSessionIndex - 1].lastSession.sceneName);
         }
     }
 
-    private void HandlePromptDisplay()
+    private void HandlePromptDisplay(InputAction.CallbackContext context)
     {
-        // Trigger the display prompt using the left controller's button
-        if (Input.GetKeyDown(KeyCode.O)) // Example: Left controller button press
+        if (player.userType == PlayerType.Presenter)
         {
+            // Trigger the display prompt using the left controller's button
             if (displayPrompt != null)
             {
                 displayPrompt.TogglePrompt(); // Call the method to toggle the prompt's visibility
@@ -178,18 +254,18 @@ public class DesktopController : MonoBehaviour, IPlayerController
         }
     }
 
-    private void AttentionUIMessage()
+    private void AttentionUIMessage(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(KeyCode.U))
+        if (player.userType == PlayerType.Presenter)
         {
             print("Click on Prompt UI");
             player.CmdToggleAudienceReminder();
         }
     }
 
-    private void ShowModels()
+    private void ShowModels(InputAction.CallbackContext context)
     {
-        if (Input.GetKeyDown(KeyCode.N)) // 按下 "N" 键切换到下一个星球
+        if (player.userType == PlayerType.Presenter)
         {
             if (player.isServer)
             {
@@ -202,22 +278,5 @@ public class DesktopController : MonoBehaviour, IPlayerController
             }
         }
     }
-
-    //private void HandleTeleportInput()
-    //{
-    //    if (Input.GetMouseButtonDown(1))
-    //    {
-    //        print("Right clicking");
-    //        Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-    //        RaycastHit hit;
-
-    //        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-    //        {
-    //            print(hit.transform.gameObject.name);
-    //            print("In the if statement.");
-    //            player.RequestTeleport(hit.point);
-    //        }
-    //    }
-    //}
 
 }

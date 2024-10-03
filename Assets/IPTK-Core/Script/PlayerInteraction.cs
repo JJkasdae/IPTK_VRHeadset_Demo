@@ -2,42 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
     [SerializeField]
     private Camera playerCamera;
 
+    private InputAction clickAction;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        clickAction = new InputAction(binding: "<Mouse>/leftButton");
+        clickAction.performed += OnMouseClick;
+        clickAction.Enable();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        // 如果鼠标悬停在 UI 元素上，不执行 3D 对象的交互
-        //if (EventSystem.current.IsPointerOverGameObject())
-        //{
-        //    return;
-        //}
+        clickAction.Disable();
+    }
 
-        // 检测鼠标点击
-        if (Input.GetMouseButtonDown(0)) // 0 表示左键点击
+    private void OnMouseClick(InputAction.CallbackContext context)
+    {
+        RaycastHit hit;
+        Ray ray = playerCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (Physics.Raycast(ray, out hit))
         {
-            RaycastHit hit;
-            Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
+            GameObject hitObject = hit.transform.gameObject;
 
-            if (Physics.Raycast(ray, out hit))
+            Interactable interactable = hitObject.GetComponent<Interactable>();
+            if (interactable != null)
             {
-                GameObject hitObject = hit.transform.gameObject;
-
-                Interactable interactable = hitObject.GetComponent<Interactable>();
-                if (interactable != null)
-                {
-                    interactable.Interact();
-                }
+                interactable.Interact();
             }
         }
     }
