@@ -43,6 +43,11 @@ public class DesktopController : MonoBehaviour, IPlayerController
     private InputAction nextSceneAction;
     private InputAction previousSceneAction;
 
+    private InputAction rotateHeadLeftAction;
+    private InputAction rotateHeadRightAction;
+
+    public Transform headTransform; // 用于指定 Avatar 头部的 Transform
+
     public void Initialize(Player player)
     {
         this.player = player;
@@ -83,6 +88,10 @@ public class DesktopController : MonoBehaviour, IPlayerController
         nextSceneAction = new InputAction(binding: "<Keyboard>/rightArrow");
         previousSceneAction = new InputAction(binding: "<Keyboard>/leftArrow");
 
+        rotateHeadLeftAction = new InputAction(binding: "<Keyboard>/z");
+        rotateHeadRightAction = new InputAction(binding: "<Keyboard>/x");
+
+
         nextPlanetAction.performed += ShowModels;
         showPromptAction.performed += HandlePromptDisplay;
         showAttentionUIAction.performed += AttentionUIMessage;
@@ -115,6 +124,8 @@ public class DesktopController : MonoBehaviour, IPlayerController
             showAttentionUIAction.Enable();
             nextSceneAction.Enable();
             previousSceneAction.Enable();
+            rotateHeadLeftAction.Enable();  // 启用头部左转按键
+            rotateHeadRightAction.Enable(); // 启用头部右转按键
         }
     }
 
@@ -134,6 +145,8 @@ public class DesktopController : MonoBehaviour, IPlayerController
         showAttentionUIAction.Disable();
         nextSceneAction.Disable();
         previousSceneAction.Disable();
+        rotateHeadLeftAction.Disable();  // 启用头部左转按键
+        rotateHeadRightAction.Disable(); // 启用头部右转按键
     }
 
     public void HandleInput(Camera playerCamera)
@@ -213,7 +226,17 @@ public class DesktopController : MonoBehaviour, IPlayerController
         {
             transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
         }
-        
+
+        // 新增：使用Z和X键进行头部的左右旋转
+        if (rotateHeadLeftAction.ReadValue<float>() > 0)
+        {
+            headTransform.Rotate(Vector3.up * -rotationSpeed * Time.deltaTime); // 头部向左转
+        }
+        if (rotateHeadRightAction.ReadValue<float>() > 0)
+        {
+            headTransform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);  // 头部向右转
+        }
+
     }
 
     private void TeleportMovement(Camera playerCamera)

@@ -186,7 +186,7 @@ public class Player : NetworkBehaviour
                     movementType = spawnPointScript.movementType;
 
                     Vector3 spawnPosition = spawnPoint.position;
-                    spawnPosition.y += 50f;
+                    //spawnPosition.y += 50f;
 
                     RpcSetPlayerPosition(spawnPosition);
                     isFull = true;
@@ -261,12 +261,6 @@ public class Player : NetworkBehaviour
         }
 
         controller?.HandleInput(playerCamera);
-    }
-
-    public override void OnStartLocalPlayer()
-    {
-        //base.OnStartLocalPlayer();
-        GetComponent<Renderer>().material.color = Color.blue;
     }
 
     [Command]

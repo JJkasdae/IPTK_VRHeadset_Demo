@@ -159,6 +159,7 @@ public class SampleAvatarEntity : OvrAvatarEntity
         // Zip asset paths are relative to the inside of the zip.
         // Zips can be loaded from the OvrAvatarManager at startup or by calling OvrAvatarManager.Instance.AddZipSource
         // Assets can also be loaded individually from Streaming assets
+        print(_assets);
         foreach (var asset in _assets)
         {
             bool isFromZip = (asset.source == AssetSource.Zip);
