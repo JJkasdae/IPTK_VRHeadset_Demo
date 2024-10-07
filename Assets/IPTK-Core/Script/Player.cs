@@ -46,8 +46,10 @@ public class Player : NetworkBehaviour
         }
         else
         {
-            GameObject avataHead = this.transform.GetChild(0).gameObject;
-            avataHead.transform.GetChild(0).gameObject.SetActive(false);
+            GameObject DesktopCameraParent = this.transform.Find("DesktopCamera").gameObject;
+            GameObject VRHeadsetCameraParent = this.transform.Find("VRHeadsetCamera").gameObject;
+            DesktopCameraParent.SetActive(false);
+            VRHeadsetCameraParent.SetActive(false);
         }
 
         if (isLocalPlayer && userType == PlayerType.Audience)
