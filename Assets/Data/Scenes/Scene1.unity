@@ -292,6 +292,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6660288490827408159, guid: 98e3e40db13ec3d4f9b7a8dca6efbf84, type: 3}
   m_PrefabInstance: {fileID: 878716443}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &597997534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 597997535}
+  m_Layer: 0
+  m_Name: AvatarManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &597997535
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597997534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &621600539
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1734,3 +1765,4 @@ SceneRoots:
   - {fileID: 2245354165865117825}
   - {fileID: 6320455940180340340}
   - {fileID: 1601602727692247374}
+  - {fileID: 597997535}
