@@ -13,5 +13,25 @@ MonoBehaviour:
   m_Name: Session2
   m_EditorClassIdentifier: 
   _name: Session 2
-  _description: Session 2 usually demonstrate the first section of the presentation.
+  _description: "- Now, let\u2019s talk about Mercury, the closest planet to the
+    sun. Despite being so close, Mercury surprisingly does not have the highest temperatures
+    among the planets. Mercury is the second densest planet in the Solar System,
+    though it is also the smallest planet.\n- Next, let\u2019s take a look at Venus.
+    Venus is actually hotter than Mercury, even though it is farther away from the
+    Sun. One interesting fact about Venus is that a day on this planet is longer
+    than its entire year! The surface temperature on Venus is a scorching 462\xB0C.
+    Additionally, Venus is the second brightest natural object in the night sky after
+    the Moon.\n- Now, let\u2019s move on to Earth, our home, which is the third planet
+    from the sun. Earth is the only planet we know of that has an atmosphere containing
+    free oxygen, vast oceans of water, and, of course, life. It has a diameter of
+    roughly 8,000 miles, or 13,000 kilometers, and its round shape is due to gravity
+    pulling matter into a ball.\n- Now, let\u2019s move on to Mars, the fourth planet
+    from the Sun and the second smallest in the Solar System. Mars is often called
+    the \"Red Planet\" because its iron-rich dust gives the landscape a rusty-red
+    color. The gravity on Mars is only 38% of Earth's. So, if you weigh 60 pounds
+    on Earth, you\u2019d only weigh about 23 pounds on Mars.\n- Finally, let's talk
+    about Jupiter, the fifth planet from the Sun and the largest in the Solar System.
+    Jupiter is the fourth brightest object in the solar system. Despite its enormous
+    size, Jupiter has the shortest day of all the planets, rotating on its axis once
+    every 9 hours and 55 minutes."
   _sceneName: Scene2

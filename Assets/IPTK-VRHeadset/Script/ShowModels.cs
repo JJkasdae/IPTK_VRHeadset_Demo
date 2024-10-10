@@ -10,11 +10,8 @@ public class ShowModels : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (isServer)
-        {
-            // 初始化时隐藏所有星球
-            HideAllChildren();
-        }
+         // 初始化时隐藏所有星球
+        HideAllChildren();
     }
 
     // 隐藏所有的子物体
