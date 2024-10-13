@@ -15,11 +15,11 @@ public enum ObjectType
 
 public class CreatePresentationElements
 {
-    private const string folderPath = "Assets/Data/PresentationObject";
-    private const string sessionPath = "Assets/Data/Sessions";
-    private const string transitionPath = "Assets/Data/Transitions";
-    private const string scenePath = "Assets/Data/Scenes";
-    private const string timelinePath = "Assets/Data/Timeline";
+    private const string folderPath = "Assets/PresentationStructure/PresentationObject";
+    private const string sessionPath = "Assets/PresentationStructure/Sessions";
+    private const string transitionPath = "Assets/PresentationStructure/Transitions";
+    private const string scenePath = "Assets/PresentationStructure/Scenes";
+    private const string timelinePath = "Assets/PresentationStructure/Timeline";
 
     [MenuItem("PresentationData/Create a presentation")]
     public static void CreatePresentation()

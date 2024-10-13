@@ -22,12 +22,6 @@ public class TransitionData : ScriptableObject
     [SerializeField]
     private transitionEffectType _effect;
 
-    [SerializeField]
-    private bool _Effect;
-
-    [SerializeField]
-    private string _importEffectAnimation;
-
     public SessionData lastSession => _lastSession;
     public SessionData nextSession => _nextSession;
 

@@ -20,7 +20,7 @@ public class SpawnpointsGeneration: EditorWindow
     private PlayerType presenterType = PlayerType.Presenter;
     private PlayerType audienceType = PlayerType.Audience;
 
-    [MenuItem("ImmersivePresentation/Generate spawn points")]
+    [MenuItem("ImmersivePresentationFeatures/Generate spawn points")]
     public static void ShowPopUpWindow()
     {
         GetWindow<SpawnpointsGeneration>("Spawn Point Generator");

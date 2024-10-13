@@ -17,8 +17,6 @@ public class TransitionDataEditor : Editor
         _lastSession = serializedObject.FindProperty("_lastSession");
         _nextSession = serializedObject.FindProperty("_nextSession");
         _effect = serializedObject.FindProperty("_effect");
-        _Effect = serializedObject.FindProperty("_Effect");
-        _importEffectAnimation = serializedObject.FindProperty("_importEffectAnimation");
     }
 
     public override void OnInspectorGUI()
@@ -28,12 +26,6 @@ public class TransitionDataEditor : Editor
         EditorGUILayout.ObjectField(_lastSession, new GUIContent("Last Session"));
         EditorGUILayout.ObjectField(_nextSession, new GUIContent("Next Session"));
         EditorGUILayout.PropertyField(_effect, new GUIContent("Effect"));
-        EditorGUILayout.PropertyField(_Effect, new GUIContent("Effect"));
-
-        if (_Effect.boolValue == true)
-        {
-            EditorGUILayout.PropertyField(_importEffectAnimation, new GUIContent("Transition Animation"));
-        }
 
         serializedObject.ApplyModifiedProperties();
     }

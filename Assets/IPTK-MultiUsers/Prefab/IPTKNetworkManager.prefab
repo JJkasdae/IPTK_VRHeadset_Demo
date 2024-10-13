@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3845451514567254051}
   - component: {fileID: 3164940821827996344}
-  - component: {fileID: 8644726589681831468}
   - component: {fileID: 6700660733399720770}
   m_Layer: 0
   m_Name: IPTKNetworkManager
@@ -80,20 +79,6 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
---- !u!114 &8644726589681831468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2785895964156591257}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0
 --- !u!114 &6700660733399720770
 MonoBehaviour:
   m_ObjectHideFlags: 0
